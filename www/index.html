@@ -44,7 +44,7 @@
 		    yaam.gWatchID = null;
 		    var gOptions = { frequency: 50 }; 
 			yaam.foo='bar';		    
-		    yaam.accelUpdate = function(acceleration) {
+		    function accelUpdate(acceleration) {
 			acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
 			data.push(acceleration);
 			yaam.acceleration = acceleration;
@@ -53,8 +53,8 @@
 		    }
 		    yaam.watch = function onDeviceReady() {
 			console.log('watch');
-			//navigator.accelerometer.getCurrentAcceleration(yamm.accelUpdate, function() {alert("Couldn't get acceleration");});
-			yaam.gWatchID = navigator.accelerometer.watchAcceleration(yamm.accelUpdate,
+			navigator.accelerometer.getCurrentAcceleration(accelUpdate, function() {alert("Couldn't get acceleration");});
+			yaam.gWatchID = navigator.accelerometer.watchAcceleration(accelUpdate,
 				function() {
 				    alert("Couldn't watch acceleration");
 				},
