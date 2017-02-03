@@ -38,8 +38,34 @@
         <script type="text/javascript" src="cordova.js"></script>
     	<script src="js/d3.v4.min.js"></script>
 	<script src="js/viz.js"></script>
-        <script type="text/javascript">
-            document.addEventListener('deviceready', function() { alert('device is ready'); }, false);
-        </script>
+	<script type="text/javascript">
+	    var gWatchID = null;
+	    var gOptions = { frequency: 50 };  
+	    // Wait for PhoneGap to load
+	    document.addEventListener("deviceready", onDeviceReady, false);
+	    function accelUpdate(acceleration) {
+		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
+		data.push(acceleration)
+		document.getElementById('accelAvgMag').innerHTML = d3.mean(data,function(d){return d.magnitude});
+		document.getElementById('accelMag').innerHTML = acceleration.magnitude;	
+		document.getElementById('accelX').innerHTML = acceleration.x;
+		document.getElementById('accelY').innerHTML = acceleration.y;
+		document.getElementById('accelZ').innerHTML = acceleration.z;
+	//	console.log('data',data);
+		draw();
+	    }
+	    function clearWatch() {
+		navigator.accelerometer.clearWatch(gWatchID);
+	    }
+
+	    //
+	    function onDeviceReady() {
+		gWatchID = navigator.accelerometer.watchAcceleration(accelUpdate,
+		        function() {
+		            alert("Couldn't watch acceleration");
+		        },
+		        gOptions);
+	    }
+	</script>
     </body>
 </html>
