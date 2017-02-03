@@ -44,7 +44,7 @@
 		    yaam.gWatchID = null;
 		    var gOptions = { frequency: 50 }; 
 			yaam.foo='bar';		    
-			yaam.accelUpdate = function(acceleration) {
+		    yaam.accelUpdate = function(acceleration) {
 			acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
 			data.push(acceleration);
 			yaam.acceleration = acceleration;
@@ -63,13 +63,13 @@
 		    yaam.clearWatch = function() {
 			navigator.accelerometer.clearWatch(yaam.gWatchID);
 		    };
-		    yaam.watch();
+//		    yaam.watch();
 		  });
 		 deviceReady = function() {
 		    console.log('bootstrap');
 		    angular.bootstrap(document, ['YAAM']);
 		 };
-		 window.addEventListener('deviceready', deviceReady, false);
+		 window.addEventListener('load', deviceReady, false);
 	</script>
     </body>
 </html>
