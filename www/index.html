@@ -62,8 +62,8 @@
 		    };
 		    yaam.clearWatch = function() {
 			navigator.accelerometer.clearWatch(yaam.gWatchID);
+			yaam.gWatchID = null;
 		    };
-//		    yaam.watch();
 		  });
 		 deviceReady = function() {
 		    console.log('bootstrap');
