@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='YAAM'>
     <head>
         <title>YAAM</title>
 	    <style>
@@ -24,48 +24,48 @@
 	<script src="js/angular.min.js"></script>
     </head>
     <body>
-	<svg width="350" height="400"></svg>
+	<div ng-controller="YAAMController as yaam">
+		<svg width="350" height="400"></svg>
 
-	<button onclick='clearWatch()'>Clear Watch</button>
-	<button onclick='navigator.app.exitApp()'>Close</button>
+		<button ng-click='yaam.clearWatch()' class="btn btn-primary">Clear Watch</button>
 
-	<div>Avg Mag: <span id="accelAvgMag"></span></div>
-	<div>Mag: <span id="accelMag"></span></div>
-	<div>X: <span id="accelX"></span></div>
-	<div>Y: <span id="accelY"></span></div>
-	<div>Z <span id="accelZ"></span></div>
+		<button onclick='navigator.app.exitApp()' class="btn btn-primary">Exit</button>
 
+		<div>Avg Mag: {{yaam.accelAvgMag}}</div>
+		<div>Accel: {{acceleration}}</div>
+	</div>
         <script type="text/javascript" src="cordova.js"></script>
     	<script src="js/d3.v4.min.js"></script>
 	<script src="js/viz.js"></script>
 	<script type="text/javascript">
-	    var gWatchID = null;
-	    var gOptions = { frequency: 50 };  
-	    // Wait for PhoneGap to load
-	    document.addEventListener("deviceready", onDeviceReady, false);
-	    function accelUpdate(acceleration) {
-		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
-		data.push(acceleration)
-		document.getElementById('accelAvgMag').innerHTML = d3.mean(data,function(d){return d.magnitude});
-		document.getElementById('accelMag').innerHTML = acceleration.magnitude;	
-		document.getElementById('accelX').innerHTML = acceleration.x;
-		document.getElementById('accelY').innerHTML = acceleration.y;
-		document.getElementById('accelZ').innerHTML = acceleration.z;
-	//	console.log('data',data);
-		draw();
-	    }
-	    function clearWatch() {
-		navigator.accelerometer.clearWatch(gWatchID);
-	    }
-
-	    //
-	    function onDeviceReady() {
-		gWatchID = navigator.accelerometer.watchAcceleration(accelUpdate,
-		        function() {
-		            alert("Couldn't watch acceleration");
-		        },
-		        gOptions);
-	    }
+	       angular.module('YAAM', [])
+		  .controller('YAAMController', function($scope) {
+		    var yaam = this;
+		    var gWatchID = null;
+		    var gOptions = { frequency: 50 }; 
+			yaam.foo='bar';		    
+			yaam.accelUpdate = function(acceleration) {
+			acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
+			data.push(acceleration);
+			yaam.acceleration = acceleration;
+			yaam.accelAvgMag = d3.mean(data,function(d){return d.magnitude});
+			draw();
+		    }
+		    yaam.onDeviceReady = function onDeviceReady() {
+			console.log('ready');
+			navigator.accelerometer.getCurrentAcceleration(yamm.accelUpdate, function() {alert("Couldn't get acceleration");});
+			gWatchID = navigator.accelerometer.watchAcceleration(yamm.accelUpdate,
+				function() {
+				    alert("Couldn't watch acceleration");
+				},
+				gOptions);
+		    };
+		    yaam.clearWatch = function() {
+			navigator.accelerometer.clearWatch(gWatchID);
+		    };
+		    document.addEventListener("deviceready", yaam.onDeviceReady, false); 
+		//    document.addEventListener("onload", yaam.onDeviceReady, false); 
+		  });
 	</script>
     </body>
 </html>
