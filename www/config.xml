@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.schaal.activitymonitor"
+        version   = "1.0.0">
+
+    <name>Activity Monitor</name>
+
+    <description>
+        Yet another activity monitor
+    </description>
+
+    <author href="" email="amschaal@gmail.com">
+        Adam
+    </author>
+    
+    <icon src="icon.png" />
+        <gap:platform name="android" />
+
+        <preference name="permissions" value="none"/>
+        <plugin name="cordova-plugin-device" />
+        <plugin name="cordova-plugin-device-motion" />
+        <plugin name="cordova-plugin-geolocation" />
+
+</widget>
