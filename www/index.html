@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app='YAAM'>
+<html>
     <head>
         <title>YAAM</title>
 	    <style>
@@ -26,13 +26,13 @@
     <body>
 	<div ng-controller="YAAMController as yaam">
 		<svg width="350" height="400"></svg>
-
-		<button ng-click='yaam.clearWatch()' class="btn btn-primary">Clear Watch</button>
+		<button ng-click='yaam.watch()' class="btn btn-primary" ng-if="!yaam.gWatchID">Watch</button>
+		<button ng-click='yaam.clearWatch()' class="btn btn-primary" ng-if="yaam.gWatchID">Clear Watch</button>
 
 		<button onclick='navigator.app.exitApp()' class="btn btn-primary">Exit</button>
 
 		<div>Avg Mag: {{yaam.accelAvgMag}}</div>
-		<div>Accel: {{acceleration}}</div>
+		<div>Accel: {{yamm.acceleration}}</div>{{yaam.foo}}
 	</div>
         <script type="text/javascript" src="cordova.js"></script>
     	<script src="js/d3.v4.min.js"></script>
@@ -41,7 +41,7 @@
 	       angular.module('YAAM', [])
 		  .controller('YAAMController', function($scope) {
 		    var yaam = this;
-		    var gWatchID = null;
+		    yaam.gWatchID = null;
 		    var gOptions = { frequency: 50 }; 
 			yaam.foo='bar';		    
 			yaam.accelUpdate = function(acceleration) {
@@ -51,21 +51,25 @@
 			yaam.accelAvgMag = d3.mean(data,function(d){return d.magnitude});
 			draw();
 		    }
-		    yaam.onDeviceReady = function onDeviceReady() {
-			console.log('ready');
-			navigator.accelerometer.getCurrentAcceleration(yamm.accelUpdate, function() {alert("Couldn't get acceleration");});
-			gWatchID = navigator.accelerometer.watchAcceleration(yamm.accelUpdate,
+		    yaam.watch = function onDeviceReady() {
+			console.log('watch');
+			//navigator.accelerometer.getCurrentAcceleration(yamm.accelUpdate, function() {alert("Couldn't get acceleration");});
+			yaam.gWatchID = navigator.accelerometer.watchAcceleration(yamm.accelUpdate,
 				function() {
 				    alert("Couldn't watch acceleration");
 				},
 				gOptions);
 		    };
 		    yaam.clearWatch = function() {
-			navigator.accelerometer.clearWatch(gWatchID);
+			navigator.accelerometer.clearWatch(yaam.gWatchID);
 		    };
-		    document.addEventListener("deviceready", yaam.onDeviceReady, false); 
-		//    document.addEventListener("onload", yaam.onDeviceReady, false); 
+		    yaam.watch();
 		  });
+		 deviceReady = function() {
+		    console.log('bootstrap');
+		    angular.bootstrap(document, ['YAAM']);
+		 };
+//		 window.addEventListener('deviceready', deviceReady, false);
 	</script>
     </body>
 </html>
