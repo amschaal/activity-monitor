@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
         <title>YAAM</title>
 	    <style>
 	   	.line {
@@ -21,22 +22,33 @@
 		  stroke: red;
 		}
 	    </style>
-	<script src="js/angular.min.js"></script>
+	<link rel="stylesheet" href="css/ionic.css"/>
+	<script src="js/ionic.bundle.js"></script>
+	<!--<script src="js/angular.min.js"></script>-->
+	<script type="text/javascript" src="cordova.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers.js"></script>
+	<script src="js/services.js"></script>
     </head>
-    <body>
-	<div ng-controller="YAAMController as yaam">
-		<svg width="350" height="400"></svg>
-		<button ng-click='yaam.watch()' class="btn btn-primary" ng-if="!yaam.gWatchID">Watch</button>
-		<button ng-click='yaam.clearWatch()' class="btn btn-primary" ng-if="yaam.gWatchID">Clear Watch</button>
-
-		<button onclick='navigator.app.exitApp()' class="btn btn-primary">Exit</button>
-
-		<div>Avg Mag: {{yaam.accelAvgMag}}</div>
-		<div>Accel: {{yaam.acceleration}}</div>
-	</div>
-        <script type="text/javascript" src="cordova.js"></script>
-    	<script src="js/d3.v4.min.js"></script>
-	<script src="js/viz.js"></script>
+  <body ng-app="yaam">
+    <!--
+      The nav bar that will be updated as we navigate between views.
+    -->
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <!--
+      The views will be rendered in the <ion-nav-view> directive below
+      Templates are in the /templates folder (but you could also
+      have templates inline in this html file if you'd like).
+    -->
+    <ion-nav-view></ion-nav-view>
+	<script src="js/d3.v4.min.js"></script>
+	<!--<script src="js/viz.js"></script>-->
+  </body>
+        
+    	<!--
 	<script type="text/javascript">
 	       angular.module('YAAM', [])
 		  .controller('YAAMController', function($scope) {
@@ -71,5 +83,5 @@
 		 };
 		 window.addEventListener('load', deviceReady, false);
 	</script>
-    </body>
+-->
 </html>
