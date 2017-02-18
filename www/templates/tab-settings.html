@@ -1,5 +1,19 @@
 <ion-view view-title="Settings">
   <ion-content class="padding">
-    	<input ng-model="new_activity"/><button ng-click="addActivity()">Add</button>
+	<div class="list">
+	  <div class="item item-input-inset">
+	    <label class="item-input-wrapper">
+	      <input type="text" placeholder="Activity name" ng-model="new_activity">
+	    </label>
+	    <button class="button button-small" ng-click="addActivity(new_activity);new_activity='';">
+	      Add
+	    </button>
+	  </div>
+
+	</div>
+	<ul>
+	<li ng-repeat="activity in activities">{{activity}}</li>
+	</ul>
+	
   </ion-content>
 </ion-view>

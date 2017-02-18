@@ -1,30 +1,64 @@
-angular.module('yaam.controllers', [])
+angular.module('yaam.controllers', ['yaam.services'])
 
-.controller('DashCtrl', function($scope) {
-	var yaam = this;
-	yaam.gWatchID = null;
-	var gOptions = { frequency: 50 }; 
-	yaam.foo='bar';		    
-	function accelUpdate(acceleration) {
-		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
-		data.push(acceleration);
-		yaam.acceleration = acceleration;
-		yaam.accelAvgMag = d3.mean(data,function(d){return d.magnitude});
-		draw();
-	}
-	yaam.watch = function onDeviceReady() {
-		console.log('watch');
-		navigator.accelerometer.getCurrentAcceleration(accelUpdate, function() {alert("Couldn't get acceleration");});
-		yaam.gWatchID = navigator.accelerometer.watchAcceleration(accelUpdate,
-			function() {
-			    alert("Couldn't watch acceleration");
-			},
-			gOptions);
-		};
-	yaam.clearWatch = function() {
-		navigator.accelerometer.clearWatch(yaam.gWatchID);
-		yaam.gWatchID = null;
-	};
+.controller('DashCtrl', function($scope, $ionicActionSheet,Activity) {
+	var yaam = $scope;
+	yaam.stats = Activity.getStats();
+	yaam.data = Activity.getData();
+	yaam.startActivity = function() {
+		console.log('show');
+	   // Show the action sheet
+	   var hideSheet = $ionicActionSheet.show({
+	     buttons: Activity.types().map(function(activity){
+			return {text: activity,activity: activity};		
+		}),
+/*[
+	       { text: '<b>Share</b> This' },
+	       { text: 'Move' }
+	     ]*/
+//	     destructiveText: 'Delete',
+	     titleText: 'Start an activity',
+	     cancelText: 'Cancel',
+	     cancel: function() {
+		console.log('cancel');
+		  // add cancel code..
+		},
+	     buttonClicked: function(index,choice) {
+		console.log(index,choice.activity);
+		Activity.startActivity(choice.activity);
+	       return true;
+	     }
+	   });
+	  }
+	yaam.stopActivity = function() {
+		console.log('show');
+	   // Show the action sheet
+	   var hideSheet = $ionicActionSheet.show({
+	     buttons: 
+		[
+	       { text: 'Save',action:'save' },
+	       { text: 'Pause',action:'pause' }
+	     ],
+	     destructiveText: 'Delete',
+	     titleText: 'Save your activity',
+	     cancelText: 'Cancel',
+	     cancel: function() {
+		console.log('cancel');
+		},
+	     destructiveButtonClicked: function(){
+		Activity.clear();
+		return true;
+		},
+	     buttonClicked: function(index,choice) {
+		switch(choice.action){
+			case 'save':
+				Activity.save();
+			case 'pause':
+				Activity.pause();
+		}
+	       return true;
+	     }
+	   });
+	  }
 
 })
 
@@ -36,22 +70,40 @@ angular.module('yaam.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
+  $scope.activities=[];
+  $scope.addActivity = function(activity){
+		console.log('add',activity);	
+	if (activity && activity.length > 2)
+		$scope.activities.push(activity);
+//	$scope.new_activity = null;
+  }
   $scope.saveActivities = function() {
-    
   };
+  
 })
-.controller('ChartCtrl', function($scope) {
+.controller('ChartCtrl', function($scope,Activity) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
   // listen for the $ionicView.enter event:
   //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+	var watcher = null;
+	$scope.$on('$ionicView.enter', function(e) {
+		console.log('enter');
+		if (!watcher)
+			watcher = Activity.watchData(draw);		
+	});
+	$scope.$on('$ionicView.leave', function(e) {
+		console.log('leaving');
+		Activity.clearWatcher(watcher);
+		watcher = null;	
+	});
+
+	
+
+
 	var n = 200,
-	    random = d3.randomNormal(0, 10),
-	    data = [];//d3.range(n).map(random);
+	    random = d3.randomNormal(0, 10);//d3.range(n).map(random);
 
 	var svg = d3.select("svg"),
 	    margin = {top: 20, right: 20, bottom: 20, left: 40},
@@ -97,7 +149,7 @@ angular.module('yaam.controllers', [])
 	    .attr("clip-path", "url(#clip)")
 	    .attr('class','lines');
 
-	function draw() {
+	function draw(data) {
 	   if (data.length > n)
 		data.shift();
 	   svg.selectAll('.lines g').remove(); 
@@ -134,7 +186,7 @@ angular.module('yaam.controllers', [])
 		data.push({x:random(),y:random(),z:random()})
 	//	console.log('data',data);
 		//setTimeout(generateData,500);
-		draw();
+		//draw();
 	}
 //generateData();
 

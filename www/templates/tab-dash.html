@@ -1,11 +1,12 @@
 <ion-view view-title="Dashboard">
   <ion-content class="padding">
-	<button ng-click='watch()' class="btn btn-primary" ng-if="!gWatchID">Watch</button>
-	<button ng-click='clearWatch()' class="btn btn-primary" ng-if="gWatchID">Clear Watch</button>
-
 	<button onclick='navigator.app.exitApp()' class="btn btn-primary">Exit</button>
-
-	<div>Avg Mag: {{accelAvgMag}}</div>
-	<div>Accel: {{acceleration}}</div>
+	
+	<div>Avg Mag: {{stats.accelAvgMag}}</div>
+	<div>Accel: {{stats.acceleration}}</div>
+	<button ng-if="!stats.activity" ng-click="startActivity()" class="button button-block button-balanced">Start</button>
+	<button ng-if="stats.activity" ng-click="stopActivity()" class="button button-block button-assertive">Stop</button>
+	{{stats}}
+	{{data.length}}
   </ion-content>
 </ion-view>
