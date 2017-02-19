@@ -1,6 +1,6 @@
 angular.module('yaam.services', [])
 
-.factory('Activity', function($interval,$rootScope) {
+.factory('Activity', function($interval,$rootScope,$http,DB) {
 	var callbacks = {};
 	var data = [];
 	var activity = null;
@@ -8,6 +8,7 @@ angular.module('yaam.services', [])
 	var gOptions = { frequency: 250 }; 
 	var stats = {};
 	var random = d3.randomNormal(0, 10);
+	var uploadURL = 'http://127.0.0.1:5000/api/activities/upload/';
 	function accelUpdate(acceleration) {
 		data.push(acceleration);		
 		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
@@ -72,7 +73,13 @@ angular.module('yaam.services', [])
 		save: function() {
 			//save data
 			console.log('save',data);
-			clearActivity();
+			//var result = DB.saveActivity({'type':activity,'data':data});
+			$http.post(uploadURL, {'type':activity,'data':data}).then(function(){
+				clearActivity();
+			},function(){
+				console.log('Unable to upload activity data');			
+			});
+			
 		},
 		clear: clearActivity,
 		startActivity(type){
@@ -98,4 +105,31 @@ angular.module('yaam.services', [])
 				delete callbacks[index];
 		}
 	};
+})
+.factory('DB', function() {
+	console.log('start db');
+	var userID = 'user123';  //this will come from elsewhere at somepoint	
+	var config = {
+	    apiKey: "AIzaSyAZ5d6Rf55zMQv33EAeJwdJwnAeNmUC3hE",
+	    authDomain: "yaam-bc02f.firebaseapp.com",
+	    databaseURL: "https://yaam-bc02f.firebaseio.com",
+	    storageBucket: "yaam-bc02f.appspot.com",
+	    messagingSenderId: "311205090986"
+	  };
+	  firebase.initializeApp(config);
+	  var activityList = firebase.database().ref('users/' + userID+'/raw/');
+	return {
+		types: function() {
+			return ['walk','bike'];
+		},
+		saveActivity(activity){
+			var newActivityRef = activityList.push();
+			// we can get its id using key()
+			console.log('activity key'+newActivityRef.key);
+			// now it is appended at the end of data at the server
+			return newActivityRef.set(activity);
+		}
+	};
 });
+
+
