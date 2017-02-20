@@ -23,5 +23,6 @@
         <plugin name="cordova-plugin-device" />
         <plugin name="cordova-plugin-device-motion" />
         <plugin name="cordova-plugin-geolocation" />
+	<plugin name="cordova-plugin-whitelist" />
 	<access origin="*" />
 </widget>
