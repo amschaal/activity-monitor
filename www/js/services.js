@@ -1,6 +1,6 @@
 angular.module('yaam.services', [])
 
-.factory('Activity', function($interval,$rootScope,$http,DB) {
+.factory('Activity', function($interval,$rootScope,$http) {
 	var callbacks = {};
 	var data = [];
 	var activity = null;
@@ -107,6 +107,7 @@ angular.module('yaam.services', [])
 	};
 })
 .factory('DB', function() {
+	/*
 	console.log('start db');
 	var userID = 'user123';  //this will come from elsewhere at somepoint	
 	var config = {
@@ -130,6 +131,7 @@ angular.module('yaam.services', [])
 			return newActivityRef.set(activity);
 		}
 	};
+*/
 });
 
 
