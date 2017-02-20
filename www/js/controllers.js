@@ -71,6 +71,7 @@ angular.module('yaam.controllers', ['yaam.services'])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
   $scope.activities=[];
+  $scope.api_url = window.localStorage.getItem('api_url');
   $scope.addActivity = function(activity){
 		console.log('add',activity);	
 	if (activity && activity.length > 2)
@@ -78,6 +79,9 @@ angular.module('yaam.controllers', ['yaam.services'])
 //	$scope.new_activity = null;
   }
   $scope.saveActivities = function() {
+  };
+  $scope.setAPIURL = function(URL){
+	window.localStorage.setItem('api_url', URL);
   };
   
 })

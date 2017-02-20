@@ -8,7 +8,7 @@ angular.module('yaam.services', [])
 	var gOptions = { frequency: 250 }; 
 	var stats = {};
 	var random = d3.randomNormal(0, 10);
-	var uploadURL = 'http://127.0.0.1:5000/api/activities/upload/';
+	var uploadURL = '/api/activities/upload/';
 	function accelUpdate(acceleration) {
 		data.push(acceleration);		
 		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
@@ -60,6 +60,10 @@ angular.module('yaam.services', [])
 		    }
 		} 
 	}
+	function getAPIURL(){
+		var url = window.localStorage.getItem('api_url');
+		return url ? url : 'http://127.0.0.1:5000';
+	}
 	return {
 		types: function() {
 			return ['walk','bike'];
@@ -74,7 +78,7 @@ angular.module('yaam.services', [])
 			//save data
 			console.log('save',data);
 			//var result = DB.saveActivity({'type':activity,'data':data});
-			$http.post(uploadURL, {'type':activity,'data':data}).then(function(){
+			$http.post(getAPIURL()+uploadURL, {'type':activity,'data':data}).then(function(){
 				clearActivity();
 			},function(){
 				console.log('Unable to upload activity data');			

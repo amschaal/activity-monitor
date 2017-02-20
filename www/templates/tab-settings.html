@@ -9,11 +9,19 @@
 	      Add
 	    </button>
 	  </div>
-
-	</div>
 	<ul>
-	<li ng-repeat="activity in activities">{{activity}}</li>
+		<li ng-repeat="activity in activities">{{activity}}</li>
 	</ul>
+	  <div class="item item-input-inset">
+	    <label class="item-input-wrapper">
+	      <input type="text" placeholder="API URL" ng-model="api_url">
+	    </label>
+	    <button class="button button-small" ng-click="setAPIURL(api_url)">
+	      Save
+	    </button>
+	  </div>
+	</div>
+
 	
   </ion-content>
 </ion-view>
