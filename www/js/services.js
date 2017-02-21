@@ -9,6 +9,13 @@ angular.module('yaam.services', [])
 	var stats = {};
 	var random = d3.randomNormal(0, 10);
 	var uploadURL = '/api/activities/upload/';
+	var typesURL = '/api/activities/types/';
+	var types = [];
+	$http.get(getAPIURL()+typesURL).then(function(response){
+				types = response.data;
+			},function(){
+				console.log('Unable to load types');			
+			});
 	function accelUpdate(acceleration) {
 		data.push(acceleration);		
 		acceleration.magnitude = Math.sqrt(acceleration.x*acceleration.x+acceleration.y*acceleration.y+acceleration.z*acceleration.z)        
@@ -66,7 +73,7 @@ angular.module('yaam.services', [])
 	}
 	return {
 		types: function() {
-			return ['walk','bike'];
+			return types;
 		},
 		pause: function(){
 			clearWatch();		
