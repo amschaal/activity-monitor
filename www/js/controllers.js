@@ -29,8 +29,12 @@ angular.module('yaam.controllers', ['yaam.services'])
 	     }
 	   });
 	  }
+	yaam.resumeActivity =function(){
+		Activity.resume();
+	};
 	yaam.stopActivity = function() {
 		console.log('show');
+		Activity.pause();
 	   // Show the action sheet
 	   var hideSheet = $ionicActionSheet.show({
 	     buttons: 
@@ -43,6 +47,7 @@ angular.module('yaam.controllers', ['yaam.services'])
 	     cancelText: 'Cancel',
 	     cancel: function() {
 		console.log('cancel');
+		Activity.resume();
 		},
 	     destructiveButtonClicked: function(){
 		Activity.clear();
@@ -82,6 +87,9 @@ angular.module('yaam.controllers', ['yaam.services'])
   };
   $scope.setAPIURL = function(URL){
 	window.localStorage.setItem('api_url', URL);
+  };
+  $scope.setFrequency = function(frequency){
+	window.localStorage.setItem('frequency', frequency);
   };
   
 })

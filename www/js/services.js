@@ -5,7 +5,7 @@ angular.module('yaam.services', [])
 	var data = [];
 	var activity = null;
 	var gWatchID = null;
-	var gOptions = { frequency: 250 }; 
+	//var gOptions = { frequency: 250 }; 
 	var stats = {};
 	var random = d3.randomNormal(0, 10);
 	var uploadURL = '/api/activities/upload/';
@@ -31,9 +31,9 @@ angular.module('yaam.services', [])
 				function() {
 				    alert("Couldn't watch acceleration");
 				},
-				gOptions);
+				{frequency:getFrequency()});
 		}else
-			gWatchID = $interval(generateData,gOptions.frequency);
+			gWatchID = $interval(generateData,getFrequency());
 		stats.gWatchID = gWatchID;
 	};
 	function clearWatch() {
@@ -70,6 +70,10 @@ angular.module('yaam.services', [])
 	function getAPIURL(){
 		var url = window.localStorage.getItem('api_url');
 		return url ? url : 'http://127.0.0.1:5000';
+	}
+	function getFrequency(){
+		var frequency = window.localStorage.getItem('frequency');
+		return frequency ? frequency : 50;
 	}
 	return {
 		types: function() {

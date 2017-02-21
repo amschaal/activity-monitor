@@ -5,7 +5,9 @@
 	<div>Avg Mag: {{stats.accelAvgMag}}</div>
 	<div>Accel: {{stats.acceleration}}</div>
 	<button ng-if="!stats.activity" ng-click="startActivity()" class="button button-block button-balanced">Start</button>
+	<button ng-if="stats.activity && !stats.gWatchID" ng-click="resumeActivity()" class="button button-block button-balanced">Resume</button>
 	<button ng-if="stats.activity" ng-click="stopActivity()" class="button button-block button-assertive">Stop</button>
+	
 	{{stats}}
 	{{data.length}}
   </ion-content>
